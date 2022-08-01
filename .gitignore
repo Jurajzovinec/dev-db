@@ -1,0 +1,4 @@
+dump/*
+!dump/README.md
+prod-command
+node_modules

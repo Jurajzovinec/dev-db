@@ -1,0 +1,49 @@
+name: Build and publish manually
+
+on:
+  schedule:
+    - cron: "0 0 1 1 *"
+
+  # push:
+  #   branches:
+  #     - main
+
+env:
+  REGISTRY: "registry"
+  IMAGE_NAME: "image-name"
+
+jobs:
+  build_and_push:
+    runs-on: ubuntu-latest
+    timeout-minutes: 7
+    steps:
+      - name: Checkout the repo
+        uses: actions/checkout@v2
+
+      - name: Setup nodeJs
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16
+
+      - name: Install global deps
+        run: npm i -g zx
+
+      - name: Install local deps
+        run: npm i
+
+      - name: Run dump script
+        run: zx dump.mjs ${{ secrets.DB_HOST }} ${{ secrets.DB_PORT }} ${{ secrets.DB_NAME }} ${{ secrets.DB_USERNAME }} ${{ secrets.DB_PASSWORD }}
+
+      - name: Build container image
+        run: docker build -t $(echo $REGISTRY)/$(echo $IMAGE_NAME):latest .
+
+      - name: Install doctl
+        uses: digitalocean/action-doctl@v2
+        with:
+          token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
+
+      - name: Log in to DO Container Registry
+        run: doctl registry login --expiry-seconds 600
+
+      - name: Push image to DigitalOcean Container Registry
+        run: docker push $(echo $REGISTRY)/$(echo $IMAGE_NAME):latest

@@ -1,0 +1,23 @@
+{
+  "name": "Dividendwatch dev db",
+  "version": "1.0.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/red-ram-group/dividendwatch-db-dev.git"
+  },
+  "keywords": [
+    "docker",
+    "mariadb",
+    "dump",
+    "demo"
+  ],
+  "author": "demo",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/red-ram-group/dividendwatch-db-dev/issues"
+  },
+  "homepage": "https://github.com/red-ram-group/dividendwatch-db-dev#readme",
+  "dependencies": {
+    "mysql": "2.18.1"
+  }
+}

@@ -1,0 +1,8 @@
+version: "3.9"
+
+services:
+  db:
+    image: $(echo $REGISTRY)/$(echo $IMAGE_NAME):latest
+    ports:
+      - 3306:3306
+    restart: unless-stopped
